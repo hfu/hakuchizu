@@ -1,0 +1,33 @@
+{
+  "version": 8,
+  "name": "はいから白地図",
+  "center": [74.5698, 42.8746],
+  "zoom": 4,
+  "bearing": 0,
+  "pitch": 0,
+  "sources": {
+    "openmaptiles": {
+      "type": "vector",
+      "url": "pmtiles://https://optgeo.github.io/ky1/ky1.pmtiles"
+    }
+  },
+  "layers": [
+    {
+      "id": "background",
+      "type": "background",
+      "paint": {
+        "background-color": "#f8f4f0"
+      }
+    },
+    {
+      "id": "adm1",
+      "type": "fill",
+      "source": "openmaptiles",
+      "source-layer": "adm1",
+      "paint": {
+        "fill-color": "#f0f0f0",
+        "fill-outline-color": "#cccccc"
+      }
+    }
+  ]
+}

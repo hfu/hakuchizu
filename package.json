@@ -1,0 +1,22 @@
+{
+  "name": "docs",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "prebuild": "npm run encode-style",
+    "build": "vite build",
+    "preview": "vite preview",
+    "encode-style": "node scripts/lzstring_stylejson.cjs > public/style.lz.txt",
+    "decode-style": "node scripts/decode-style.js"
+  },
+  "devDependencies": {
+    "vite": "^4.0.0"
+  },
+  "dependencies": {
+    "maplibre-gl": "^5.6.1",
+    "pmtiles": "^3.0.2",
+    "lz-string": "^1.4.4"
+  }
+}
