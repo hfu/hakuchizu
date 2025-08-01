@@ -69,15 +69,30 @@ map.on('moveend', () => {
 
 ## LZ-stringによるスタイル圧縮 / Style Compression with LZ-string
 
-スタイルJSONをURLハッシュで共有するために、LZ-stringを使用して圧縮しています。
+スタイルJSONをURLハッシュで共有するために、LZ-stringを使用して圧縮しています。圧縮前にJSONの最適化も行っています：
 
 ```typescript
-// エンコード
-const encoded = LZString.compressToEncodedURIComponent(styleJSON);
+// 数値精度の最適化とエンコード
+const minifiedStyle = JSON.parse(JSON.stringify(style, (key, value) => {
+  if (typeof value === 'number') {
+    if (key === 'zoom') return Math.round(value * 100) / 100;
+    if (key === 'bearing' || key === 'pitch') return Math.round(value * 10) / 10;
+    if (Array.isArray(style.center)) return Math.round(value * 10000) / 10000;
+    return Math.round(value * 1000) / 1000;
+  }
+  return value;
+}));
 
-// デコード
-const decoded = LZString.decompressFromEncodedURIComponent(encodedString);
+const compressed = LZString.compressToBase64(JSON.stringify(minifiedStyle));
+const urlSafe = compressed.replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
 ```
+
+最適化ポイント：
+
+- 座標：小数点以下4桁に制限
+- ズーム：小数点以下2桁に制限  
+- 角度（bearing/pitch）：小数点以下1桁に制限
+- その他の数値：小数点以下3桁に制限
 
 ## PMTilesのサポート / PMTiles Support
 
@@ -101,8 +116,8 @@ maplibregl.addProtocol("pmtiles", protocol.tile);
 2. ユーザーによるスタイル編集機能
 3. 地域選択時の詳細情報表示の拡張
 4. モバイル対応の強化
-3. 地図の共有機能の強化
-4. モバイル対応の向上
+5. 地図の共有機能の強化
+6. モバイル対応の向上
 
 ## サンプルURL / Sample URLs
 
