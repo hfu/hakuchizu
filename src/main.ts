@@ -20,6 +20,25 @@ function extractStyleFromHash(hash: string): string | null {
   return null;
 }
 
+function encodeStyle(style: any): string {
+  const jsonString = JSON.stringify(style);
+  const compressed = LZString.compressToBase64(jsonString);
+  return compressed.replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+}
+
+function decodeStyle(encoded: string): any | null {
+  try {
+    const base64 = encoded.replace(/-/g, '+').replace(/_/g, '/');
+    const padding = base64.length % 4;
+    const paddedBase64 = base64 + '='.repeat(padding ? 4 - padding : 0);
+    const decompressed = LZString.decompressFromBase64(paddedBase64);
+    return JSON.parse(decompressed);
+  } catch (e) {
+    console.error('スタイルデコード失敗', e);
+    return null;
+  }
+}
+
 function updateStyleHash(map: Map) {
   const center = map.getCenter();
   const updatedStyle = {
@@ -29,8 +48,8 @@ function updateStyleHash(map: Map) {
     bearing: map.getBearing(),
     pitch: map.getPitch(),
   };
-  const compressedStyle = LZString.compressToEncodedURIComponent(JSON.stringify(updatedStyle));
-  window.location.hash = `#style=${compressedStyle}`;
+  const encodedStyle = encodeStyle(updatedStyle);
+  window.location.hash = `#style=${encodedStyle}`;
 }
 
 function setCursorStyle(map: Map, layer: string, cursorStyle: string) {
@@ -129,10 +148,6 @@ async function setupMap() {
     setupEventListeners(map);
   });
 
-  map.on('idle', () => {
-    console.log('Map is idle');
-  });
-
   setupCustomHash(map, style);
 
   return map;
@@ -142,34 +157,22 @@ async function getDefaultStyle(): Promise<any> {
   try {
     const response = await fetch('./style.lz.txt');
     if (response.ok) {
-      const lzText = await response.text();
-      const decoded = LZString.decompressFromEncodedURIComponent(lzText);
-      return JSON.parse(decoded);
+      const encodedText = await response.text();
+      return decodeStyle(encodedText);
     }
   } catch (e) {
     console.warn('style.lz.txtからのデコードに失敗、組み込みデフォルトスタイルを使用します', e);
   }
 
-  const defaultLZ = 'N4KABGBEBuCmBOBnAlgewHaQFxgBwBpwp0BDAW1mykHsGQEQZBpBkEiGQXzdAGdUGe1SQiSAY1nQAXBFQDaAdgAsAOgCsANgCcBMJIBM03FPkBdblABeqVGSqT9kAEawS8ZOgDmVAAwWADskG8AFi4uJUAFd4fkQqUAgeVDcBMhI3QWQAG1gwnAjInkEATxiqGFheQVR4LiJMyGCk-LcyRJTELAB6Ju9BQTdGlujBB1hUaQdPb0DLaTQmgGtsgEYp2ela+tTIcrAAXyJ1iySSbIQ0sFE1jIrkABN8yxJeSYd4IPRL-QqcvJwrG7uHwKeyzJ4bhI9kE4TWFWut3uj3OAFpeKgkiV8gBiABmuDRkjRzlWAI2a22J3BUAu+RI5zIM3+AMgb0oHzRyWqL0ikACwX4+WisXiyzCrJ4HJCsFhu32pQ+FKpNIqQJBYPxPCZSSS8MRyI+6OcOJxstpKrVQUESXsooRSMlUBRvFtdrxAM2mSdYB0IE2QA';
-  try {
-    const decoded = LZString.decompressFromEncodedURIComponent(defaultLZ);
-    return JSON.parse(decoded);
-  } catch (e) {
-    console.error('デフォルトスタイルデコード失敗', e);
-    return {};
-  }
+  const defaultLZ = 'N4KABGBEBuCmBOBnAlgewHaQFxgBwBpwp0BDAW1mykHsGQEQZBpBkEiGQXzdAGdUGe1SQiSAY1nQAXBFQDaAdgAsAOgCsANgCcBMJIBM03FPkBdblABeqVGSqT9kAEawS8ZOgDmVAAwWADskG8AFi4uJUAFd4fkQqUAgeVDcBMhI3QWQAG1gwnAjInkEATxiqGFheQVR4LiJMyGCk_LcyRJTELAB6Ju9BQTdGlujBB1hUaQdPb0DLaTQmgGtsgEYp2ela-tTIcrAAXyJ1iySSbIQ0sFE1jIrkABN8yxJeSYd4IPRL_QqcvJwrG7uHwKeyzJ4bhI9kE4TWFWut3uj3OAFpeKgkiV8gBiABmuDRkjRzlWAI2a22J3BUAu-RI5zIM3-AMgb0oHzRyWqL0ikACwX4-WisXiyzCrJ4HJCsFhu32pQ-FKpNIqQJBYPxPCZSSS8MRyI-6OcOJxstpKrVQUESXsooRSMlUBRvFtdrxAM2mSdYB0IE2QA';
+  return decodeStyle(defaultLZ);
 }
 
 function getStyleFromHash(): any {
   const hash = window.location.hash;
   if (hash.startsWith('#style=')) {
     const styleParam = hash.slice(7);
-    try {
-      const decoded = LZString.decompressFromEncodedURIComponent(styleParam);
-      return JSON.parse(decoded);
-    } catch (e) {
-      console.error('スタイルデコード失敗', e);
-    }
+    return decodeStyle(styleParam);
   }
   return null;
 }

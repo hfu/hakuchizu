@@ -37,5 +37,11 @@ const style = {
   ]
 };
 
-const compressed = LZString.compressToEncodedURIComponent(JSON.stringify(style));
+function encodeStyle(style) {
+  const jsonString = JSON.stringify(style);
+  const compressed = LZString.compressToBase64(jsonString);
+  return compressed.replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+}
+
+const compressed = encodeStyle(style);
 console.log(`http://localhost:5173/#style=${compressed}`);
