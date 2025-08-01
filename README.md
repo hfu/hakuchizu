@@ -28,15 +28,11 @@
 
 基本的なURL形式: `https://hfu.github.io/hakuchizu/#style=XXXX`
 
-XXXXには、LZ-stringでエンコードされたMapLibre GL JSのスタイル定義が入ります。スタイルが指定されない場合は、デフォルトのスタイルが使用されます。
-
-地図の位置情報も共有する場合：`https://hfu.github.io/hakuchizu/#style=XXXX&zoom/latitude/longitude`
+XXXXには、LZ-stringでエンコードされたMapLibre GL JSのスタイル定義が入ります。このスタイルには、地図の中心座標（center）、ズームレベル（zoom）、回転角度（bearing）、および傾斜角度（pitch）が含まれており、これらの情報も共有されます。スタイルが指定されない場合は、デフォルトのスタイルが使用されます。
 
 Basic URL format: `https://hfu.github.io/hakuchizu/#style=XXXX`
 
-XXXX is the MapLibre GL JS style definition encoded with LZ-string. If no style is specified, the default style will be used.
-
-To share map position as well: `https://hfu.github.io/hakuchizu/#style=XXXX&zoom/latitude/longitude`
+XXXX is the MapLibre GL JS style definition encoded with LZ-string. This style includes the map's center coordinates (center), zoom level (zoom), rotation angle (bearing), and tilt angle (pitch), all of which are shared. If no style is specified, the default style will be used.
 
 ## インタラクション / Interaction
 
