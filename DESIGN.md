@@ -39,3 +39,11 @@
 - .md ファイルでドキュメントします。
 - 英語・日本語の順番の併記にします。
 - README.md の他、技術的なノートとして NOTES.md を作ります。
+
+## サンプル URL
+
+以下はサンプル URL です。地図のスタイルをエンコードした形式で指定しています。
+
+- `https://hfu.github.io/hakuchizu/#style=N4IgbgpgTgzglgewHYgFwA4A0IkEMC2EaIg9gyAiDINIMgkQyC+boAzqgz2ojYDGESALtGgNoDsAJgB06ACwBmUQAYAjADYZATj5Spo0ZlEyhUxWJlSBh8YrkBWcwF1sALwQJ8aOUIFbRRmZ5npJ6AdgAjCFwoOCQAczRJIXE+cTlxAXF0OLizKTNsAAc4DhYACzQzRSFFMvKK8vQ5bKgEACsIFg5EFFRQDgBPLKJUEHCAGwQgkABfbBgEAFcoNhg0UAQepHxcLJaBiHn2kC6e4khmhChmEBmB4iz8Da3UAHo7-I4OLJh7u6WOcIgEIXDc-JTAJCRB3ADWnRk4MhQiuN3mo3GIAGuE60G2PFAcAAJsQArgWGDwnUpkhcdg9r0QPjCcTpmTTllcGEOAtqQSiSSyQBaFgIIYnPoAYgAZugRaIRVIxuMsbi+rhsfgZKdKcQRXABhcJtNZlSluxVutNVtTpMZmxuSi0YKQIrlYzmZw2Rqtbz+cdiKKpFKpadXQNudMOAMwhB3QKvSxozGZZZRkA`
+
+この URL をブラウザで開くと、指定されたスタイルで地図が表示されます。
